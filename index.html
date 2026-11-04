@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Video Compressor – 450 KB</title>
+<title>Video Compressor – 500 KB</title>
 <style>
   :root {
     --bg: #f4f6f8;
@@ -118,7 +118,7 @@
 <body>
 <div class="card">
   <h1>Video Compressor</h1>
-  <p class="sub">Upload a video and get a compressed copy of 450 KB or less.</p>
+  <p class="sub">Upload a video and get a compressed copy of 500 KB or less.</p>
 
   <div class="privacy">
     Your video is processed entirely in your browser. It is never uploaded to a server.
@@ -131,7 +131,7 @@
     <div class="meta" id="filemeta"></div>
   </label>
 
-  <button id="go" disabled>Compress to 450 KB</button>
+  <button id="go" disabled>Compress to 500 KB</button>
 
   <div class="progress" id="progress"><div id="bar"></div></div>
   <div class="status" id="status"></div>
@@ -154,8 +154,8 @@
   "use strict";
 
   // ---------- Settings ----------
-  const TARGET_BYTES = 450 * 1000;      // 450 KB
-  const SAFETY = 0.94;                  // leave headroom for container overhead
+  const TARGET_BYTES = 500 * 1000;      // 500 KB hard limit
+  const SAFETY = 0.95;                  // aim 5% under the limit (about 475 KB)
   const MAX_ATTEMPTS = 4;
   const MIN_VIDEO_KBPS = 8;             // below this, the result will be unwatchable
   const CORE_BASE = "https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/";
@@ -303,7 +303,7 @@
 
       if (plan.videoKbps <= MIN_VIDEO_KBPS && attempt === 1 && plan.totalKbps < MIN_VIDEO_KBPS + 12) {
         throw new Error(
-          "This video is too long to reach 450 KB at any watchable quality. " +
+          "This video is too long to reach 500 KB at any watchable quality. " +
           "Trim it to a shorter clip and try again."
         );
       }
@@ -356,7 +356,7 @@
 
     if (result && lastSize > TARGET_BYTES) {
       throw new Error(
-        "Could not get under 450 KB (best result was " + formatBytes(lastSize) + "). " +
+        "Could not get under 500 KB (best result was " + formatBytes(lastSize) + "). " +
         "Trim the video to a shorter clip and try again."
       );
     }
@@ -421,7 +421,7 @@
       const blob = new Blob([out.data], { type: "video/mp4" });
       const url = URL.createObjectURL(blob);
       downloadLink.href = url;
-      downloadLink.download = safeBaseName(file.name) + "_450KB.mp4";
+      downloadLink.download = safeBaseName(file.name) + "_500KB.mp4";
       downloadWrap.style.display = "block";
       setProgress(1);
       setStatus("Done! Output is " + formatBytes(out.size) + ".", "ok");
